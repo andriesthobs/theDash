@@ -1,12 +1,12 @@
 //Your web app's Firebase configuration
 var firebaseConfig = {
   
-  apiKey: "AIzaSyBTm50oSsnWTp4y0S4VL8rAXYowtNfs7aw",
-  authDomain: "smmdashboard.firebaseapp.com",
-  projectId: "smmdashboard",
-  storageBucket: "smmdashboard.appspot.com",
-  messagingSenderId: "810120587469",
-  appId: "1:810120587469:web:d7238c0a4ca5a17b126184",
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
   
 };
 // Initialize Firebase
