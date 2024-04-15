@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>automated dashboard</title>
+    <link rel="icon" type="images/2.png" href="images/2.png">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyBTm50oSsnWTp4y0S4VL8rAXYowtNfs7aw",
+            authDomain: "smmdashboard.firebaseapp.com",  
+            databaseURL: "https://smmdashboard-default-rtdb.firebaseio.com",
+            projectId: "smmdashboard",
+            storageBucket: "smmdashboard.appspot.com",
+            messagingSenderId: "810120587469",
+        };
+        firebase.initializeApp(config);
+
+        function inputData(){
+            firebase.database().ref("RepDetails").push({
+                
+                month:document.getElementById("month").value,
+                customerName:document.getElementById("customerName").value,
+                serviceManager:document.getElementById("serviceManager").value,
+                subordinates:document.getElementById("subordinates").value,
+                revenue:document.getElementById("revenue").value,
+                numSites:document.getElementById("numSites").value,
+                numIncidents:document.getElementById("numIncidents").value,
+                missedSLA:document.getElementById("missedSLA").value
+
+            });
+            alert('monthly data stored')
+        }
+
+    </script>
+
+    <h1>Service Management Monthly report Details</h1>
+    <form id="data-entry-form">
+        <label for="month">Reporting Month:</label>
+        <select id="month" name="month">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+           
+        </select>
+
+        <label for="customerName">Customer Name:</label>
+        <input type="text" id="customerName" name="customerName" required>
+
+        
+            <label for="serviceManager">Service M Manager:</label>
+            <select id="serviceManager" onchange="updateSubordinates()">
+                <option value="">Select a Service M Manager</option>
+                <option value="Marlon">Marlon</option>
+                <option value="Crystal">Crystal</option>
+                <option value="Fathima">Fathima</option>
+                <option value="Shohal">Shohal</option>
+                <option value="Danie">Danie</option>
+                
+            </select>
+            </select>
+    
+            <label for="subordinates">Service Manager:</label>
+            <select id="subordinates">
+                <option value="">Select a Service Manager first</option>
+            </select>
+
+        <label for="revenue">Revenue:</label>
+        <input type="number" id="revenue" name="revenue" required>
+
+        <label for="numSites">Number of Sites:</label>
+        <input type="number" id="numSites" name="numSites" required>
+
+        <label for="numIncidents">Number of Incidents:</label>
+        <input type="number" id="numIncidents" name="numIncidents" required>
+
+        <label for="missedSLA">Missed SLAs:</label>
+        <input type="number" id="missedSLA" name="missedSLA" required>
+        
+        <br>
+        <button type="button" onclick="inputData()">Store Data</button>
+        <br>
+        <a href="admin.html">monthly Information</a>
+        
+    </form>
+
+    <script>
+        function updateSubordinates() {
+            const serviceManagerSelect = document.getElementById("serviceManager");
+            const subordinatesSelect = document.getElementById("subordinates");
+            const serviceManager = serviceManagerSelect.value;
+
+        
+            subordinatesSelect.innerHTML = '<option value="">Select a Service Manager first</option>';
+
+          
+            const subordinates = {
+                "Fathima": ["Neo", "Ivy", "Andries S", "Mohamed P", "Bongi", "Elaine", "Nishal", "Sumaya"],
+                "Marlon": ["Christiaan S", "Marko S", "Kevin N", "Pierre M", "Meyer R"],
+                "Crystal": ["Andriaan", "Jacques"],
+                "Peter ":[],
+                "Shohal":["Jose","Immelda","Mahesh","Zuki","Chenese","Noel","Logan"],
+                "Danie":["Andriaan","Samuel","Jacques","Sechaba","Sizwe"],
+
+            };
+
+            if (serviceManager in subordinates) {
+                const managerSubordinates = subordinates[serviceManager];
+                managerSubordinates.forEach(subordinate => {
+                    const option = document.createElement("option");
+                    option.value = subordinate;
+                    option.text = subordinate;
+                    subordinatesSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+/* Set default font family and color */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  /* Center the container */
+  .container {
+    margin: 50px auto;
+  }
+  
+  /* Set padding and border for input fields */
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+  }
+  
+  /* Style the radio button */
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+  
+  /* Add padding and border to the div elements */
+  .p-3 {
+    padding: 15px !important;
+  }
+  
+  .border {
+    border: 1px solid #dee2e6 !important;
+  }
+  
+  /* Style the labels */
+  label {
+    font-weight: bold;
+  }
+  
+  /* Style the button */
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style the total downtime display */
+  #totalDowntimeDiv {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .col {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+  

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Management Report</title>
+    <link rel="stylesheet" type="text/css" href="styles2.css">
+    <link rel="icon" type="images/.png" href="images/2.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBTm50oSsnWTp4y0S4VL8rAXYowtNfs7aw",
+            authDomain: "smmdashboard.firebaseapp.com",  
+            databaseURL: "https://smmdashboard-default-rtdb.firebaseio.com",
+            projectId: "smmdashboard",
+            storageBucket: "smmdashboard.appspot.com",
+            messagingSenderId: "810120587469",
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const db = firebase.database();
+            const dataGridBody = document.getElementById("data-grid-body");
+            const filterMonthSelect = document.getElementById("filter-month");
+            const filterButton = document.getElementById("filter-button");
+            const exportCsvButton = document.getElementById("export-csv-button");
+
+            function fetchData() {
+                const selectedMonth = filterMonthSelect.value;
+                dataGridBody.innerHTML = "";
+
+                const repDetailsRef = db.ref("RepDetails");
+                let query = repDetailsRef;
+                if (selectedMonth) {
+                    query = query.orderByChild("month").equalTo(selectedMonth);
+                }
+
+                query.once("value", function (snapshot) {
+                    snapshot.forEach(function (childSnapshot) {
+                        const data = childSnapshot.val();
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${data.month}</td>
+                            <td>${data.customerName}</td>
+                            <td>${data.serviceManager}</td>
+                            <td>${data.subordinates}</td>
+                            <td>${data.revenue}</td>
+                            <td>${data.numSites}</td>
+                            <td>${data.numIncidents}</td>
+                            <td>${data.missedSLA}</td>
+                        `;
+                        dataGridBody.appendChild(row);
+                    });
+                });
+            }
+
+            filterButton.addEventListener("click", fetchData);
+
+            function exportToCsv() {
+                const csvData = [];
+                const headerRow = [];
+                document.querySelectorAll("#data-grid th").forEach((th) => {
+                    headerRow.push(th.textContent);
+                });
+                csvData.push(headerRow);
+
+                document.querySelectorAll("#data-grid tbody tr").forEach((row) => {
+                    const rowData = [];
+                    row.querySelectorAll("td").forEach((cell) => {
+                        rowData.push(cell.textContent);
+                    });
+                    csvData.push(rowData);
+                });
+
+                const csv = Papa.unparse(csvData);
+                const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+                const link = document.createElement("a");
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "SMMData.csv");
+                    link.style.visibility = "hidden";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+
+            exportCsvButton.addEventListener("click", exportToCsv);
+
+            
+            const months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const filterMonthOptions = months.map(month => `<option value="${month}">${month}</option>`);
+            filterMonthSelect.innerHTML = filterMonthOptions.join("");
+
+          
+            fetchData();
+        });
+    </script>
+
+    <h1>Annual Report Information</h1>
+    <form id="data-entry-form"> 
+    </form>
+
+    
+    <div id="data-grid">
+        <h2>Detailed Report Information</h2>
+        <label for="filter-month">Filter by Month:</label>
+        <select id="filter-month"></select>
+        <button id="filter-button">Filter</button>
+        <button id="export-csv-button"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAXklEQVR4nGNgwA6mMDAw/IfSRIMpw0iTFgMDw0wGBoYrUE1XoHyQOF6wDqoBhjczMDAwEtIkwMDA8ACq4TEDA4MwsX4yZ2Bg+MbAwGBDrAYY0CZVA0EgSAZGCSmiMADl6iWZRO9CSwAAAABJRU5ErkJggg=="></button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Customer Name</th>
+                    <th>Service M Manager</th>
+                    <th>Service Manager</th>
+                    <th>Revenue</th>
+                    <th>Number of Sites</th>
+                    <th>Number of Incidents</th>
+                    <th>Missed SLAs</th>
+                </tr>
+            </thead>
+            <tbody id="data-grid-body">
+               
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
